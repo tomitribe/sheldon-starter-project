@@ -17,6 +17,8 @@
 * under the License.
 -->
 <%@ page session="false" %>
-<%
-    response.sendRedirect("book.jsf");
-%>
+<html>
+    <body>
+        <h1>Hello, world!</h1>
+    </body>
+</html>
