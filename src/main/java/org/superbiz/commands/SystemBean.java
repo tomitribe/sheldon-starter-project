@@ -20,11 +20,12 @@
 package org.superbiz.commands;
 
 import org.tomitribe.crest.api.Command;
+import org.tomitribe.crest.api.StreamingOutput;
 import org.tomitribe.crest.connector.api.CrestListener;
 import org.tomitribe.util.PrintString;
 
 import javax.ejb.MessageDriven;
-
+import java.io.PrintStream;
 import java.util.Map;
 import java.util.TreeSet;
 
@@ -42,7 +43,7 @@ public class SystemBean implements CrestListener {
 
         final Map<String, String> env = System.getenv();
 
-        for (String key : new TreeSet<String>(env.keySet())) {
+        for (String key : new TreeSet<>(env.keySet())) {
             out.printf("%s = %s%n", key, env.get(key));
         }
 
@@ -50,12 +51,8 @@ public class SystemBean implements CrestListener {
     }
 
     @Command
-    public String properties() {
-        final PrintString out = new PrintString();
-
-        System.getProperties().list(out);
-
-        return out.toString();
+    public StreamingOutput properties() {
+        return outputStream -> System.getProperties().list(new PrintStream(outputStream));
     }
 
 }
