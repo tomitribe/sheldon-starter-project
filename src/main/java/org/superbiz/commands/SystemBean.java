@@ -21,7 +21,7 @@ package org.superbiz.commands;
 
 import org.tomitribe.crest.api.Command;
 import org.tomitribe.crest.api.StreamingOutput;
-import org.tomitribe.crest.connector.api.CrestListener;
+import org.tomitribe.sheldon.api.CommandListener;
 import org.tomitribe.util.PrintString;
 
 import javax.ejb.MessageDriven;
@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.TreeSet;
 
 @MessageDriven(name = "System")
-public class SystemBean implements CrestListener {
+public class SystemBean implements CommandListener {
 
     @Command
     public String date() {

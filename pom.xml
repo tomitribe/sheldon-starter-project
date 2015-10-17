@@ -25,16 +25,17 @@
     <version>3</version>
   </parent>
 
-  <artifactId>crest-ssh-connector-starter-project</artifactId>
+  <artifactId>sheldon-starter-project</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
-  <name>Crest SSH Connector Starter Project</name>
+  <name>Sheldon Starter Project</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <version.crest>0.3</version.crest>
-    <version.crest-ssh-connector>1.0</version.crest-ssh-connector>
+    <version.crest>0.7</version.crest>
+    <version.sheldon>0.8-SNAPSHOT</version.sheldon>
+    <maven.checkstyle.plugin.version>2.16</maven.checkstyle.plugin.version>
   </properties>
 
   <dependencies>
@@ -46,14 +47,14 @@
     </dependency>
     <dependency>
       <groupId>org.tomitribe</groupId>
-      <artifactId>crest-ssh-connector-api</artifactId>
-      <version>${version.crest-ssh-connector}</version>
+      <artifactId>sheldon-api</artifactId>
+      <version>${version.sheldon}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.tomitribe</groupId>
-      <artifactId>crest-ssh-connector-rar</artifactId>
-      <version>${version.crest-ssh-connector}</version>
+      <artifactId>sheldon-rar</artifactId>
+      <version>${version.sheldon}</version>
       <type>rar</type>
       <scope>provided</scope>
     </dependency>
@@ -123,11 +124,11 @@
           <tomeeClassifier>plus</tomeeClassifier>
           <context>ROOT</context>
           <libs>
-            <lib>org.tomitribe:crest-ssh-connector-api:${version.crest-ssh-connector}</lib>
+            <lib>org.tomitribe:sheldon-api:${version.sheldon}</lib>
             <lib>org.tomitribe:tomitribe-crest-api:${version.crest}</lib>
           </libs>
           <apps>
-            <app>org.tomitribe:crest-ssh-connector-rar:${version.crest-ssh-connector}:rar</app>
+            <app>org.tomitribe:sheldon-rar:${version.sheldon}:rar</app>
           </apps>
         </configuration>
       </plugin>
