@@ -1,0 +1,122 @@
+= Sheldon Starter Project
+
+A "fork-and-go" project to get started using Sheldon in Apache TomEE to enable SSH access into the java process itself with commands written using the Crest API.
+
+Project includes:
+
+ - Maven war project
+ - Dependencies setup for Sheldon, Crest and TomEE
+ - TomEE Maven Plugin setup to deploy Sheldon RAR
+ - Simple sample `@Command` MDB
+
+== Sheldon Maven Dependencies
+
+Add Sheldon to your pom.xml along with the Crest API.
+
+```
+    <dependency>
+      <groupId>org.tomitribe</groupId>
+      <artifactId>sheldon-api</artifactId>
+      <version>${version.sheldon}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.tomitribe</groupId>
+      <artifactId>sheldon-rar</artifactId>
+      <version>${version.sheldon}</version>
+      <type>rar</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.tomitribe</groupId>
+      <artifactId>tomitribe-crest-api</artifactId>
+      <version>${version.crest}</version>
+      <scope>provided</scope>
+    </dependency>
+```
+
+== Deploy Sheldon RAR via TomEE Maven Plugin
+
+The Sheldon RAR can be easily deployed via simply dropping it into the `apps/` directory of your TomEE install.
+
+For those using the TomEE Maven Plugin, the following plugin configuration will do the trick and deploy Sheldon and your apps with a simple `mvn clean install tomee:run`
+
+```
+      <plugin>
+        <groupId>org.apache.openejb.maven</groupId>
+        <artifactId>tomee-maven-plugin</artifactId>
+        <configuration>
+          <tomeeClassifier>plus</tomeeClassifier>
+          <context>ROOT</context>
+          <libs>
+            <lib>org.tomitribe:sheldon-api:${version.sheldon}</lib>
+            <lib>org.tomitribe:tomitribe-crest-api:${version.crest}</lib>
+          </libs>
+          <apps>
+            <app>org.tomitribe:sheldon-rar:${version.sheldon}:rar</app>
+          </apps>
+        </configuration>
+      </plugin>
+```
+
+== Set Sheldon's SSH Port
+
+Configuring Sheldon's SSH port and prompt can be done via the TomEE `conf/system.properties` file like so:
+
+sheldon-rar-0.8-SNAPSHOTRA.sshPort = 2222
+sheldon-rar-0.8-SNAPSHOTRA.prompt = tomee>
+
+== Granting Access to Users
+
+The Connector API allows for security of the container to be leveraged, this means granting user's access is as simple as adding them to the TomEE `conf/tomcat-users.xml` file:
+
+```
+<tomcat-users>
+  <role rolename="testrole" />
+  <user username="joebloggs" password="password" roles="testrole" />
+</tomcat-users>
+```
+
+
+== Simple Crest `@Command` MDB
+
+
+```
+import org.tomitribe.crest.api.Command;
+import org.tomitribe.crest.api.StreamingOutput;
+import org.tomitribe.sheldon.api.CommandListener;
+import org.tomitribe.util.PrintString;
+
+import javax.ejb.MessageDriven;
+import java.io.PrintStream;
+import java.util.Map;
+import java.util.TreeSet;
+
+@MessageDriven(name = "System")
+public class SystemBean implements CommandListener {
+
+    @Command
+    public String date() {
+        return String.format("%tc", System.currentTimeMillis());
+    }
+
+    @Command
+    public String env() {
+        final PrintString out = new PrintString();
+
+        final Map<String, String> env = System.getenv();
+
+        for (String key : new TreeSet<>(env.keySet())) {
+            out.printf("%s = %s%n", key, env.get(key));
+        }
+
+        return out.toString();
+    }
+
+    @Command
+    public StreamingOutput properties() {
+        return outputStream -> System.getProperties().list(new PrintStream(outputStream));
+    }
+
+}
+```
