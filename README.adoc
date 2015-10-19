@@ -68,7 +68,6 @@ Configuring Sheldon's SSH port and prompt can be done via the TomEE `conf/system
 ----
 sheldon-rar-0.8-SNAPSHOTRA.sshPort = 2222
 sheldon-rar-0.8-SNAPSHOTRA.prompt = tomee>
-[source,xml]
 ----
 
 == Granting Access to Users
