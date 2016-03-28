@@ -44,7 +44,7 @@ public class SystemBean implements CommandListener {
         final Map<String, String> env = System.getenv();
 
         for (String key : new TreeSet<>(env.keySet())) {
-            out.printf("%s = %s%n", key, env.get(key));
+            out.printf("\033[37m%s\033[0m = %s%n", key, env.get(key));
         }
 
         return out.toString();
